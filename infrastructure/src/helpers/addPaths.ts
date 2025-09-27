@@ -18,7 +18,7 @@ const findRootEnv = (searchPath: string) => {
 // and not hardcoding it is to find the .env
 export const projectRootPath = findRootEnv(__dirname);
 export const projectEnvPath = path.join(projectRootPath, ".env");
-
+export const lambdasDirPath = path.join(projectRootPath, "packages/lambdas");
 export const frontendDistPath = path.join(
   projectRootPath,
   "apps/frontend/dist"

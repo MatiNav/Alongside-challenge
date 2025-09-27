@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 import * as cdk from "aws-cdk-lib";
 import { getConfig } from "./helpers";
-import { SettlementServiceStack } from "./stacks/settlementStack";
+import { SettlementStack } from "./stacks";
 
 const config = getConfig();
 
 const app = new cdk.App();
-new SettlementServiceStack(app, "InfrastructureStack", {
+new SettlementStack(app, "SettlementStack", {
   env: {
     account: config.awsAccountId,
     region: config.awsRegion,

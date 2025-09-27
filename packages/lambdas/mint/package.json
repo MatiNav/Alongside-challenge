@@ -1,0 +1,7 @@
+{
+  "name": "@alongside/settlement",
+  "main": "index.ts", 
+  "dependencies": {
+    "@alongside/shared-types": "*"
+  }
+}
