@@ -2,7 +2,9 @@
   "name": "alongside-challenge",
   "scripts": {
     "frontend:dev": "npm run dev -w @alongside/frontend",
-    "frontend:build": "npm run build -w @alongside/frontend"
+    "frontend:build": "npm run build -w @alongside/frontend",
+    "infra:deploy": "cd infrastructure; cdk deploy",
+    "infra:destroy": "cd infrastructure; cdk destroy"
   },
   "workspaces": [
     "apps/*",
