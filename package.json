@@ -1,6 +1,8 @@
 {
   "name": "alongside-challenge",
   "scripts": {
+    "frontend:dev": "npm run dev -w @alongside/frontend",
+    "frontend:build": "npm run build -w @alongside/frontend"
   },
   "workspaces": [
     "apps/*",
