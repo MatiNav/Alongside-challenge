@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Alongside Frontend
 
-## Getting Started
+> Dashboard and settlement interface for the Alongside backend challenge
 
-First, run the development server:
+## 📋 Overview
+
+This is a Next.js Single Page Application (SPA) that serves as the frontend for the settlement processing system. It provides a dashboard interface for viewing settlements, analytics, and managing mint requests.
+
+## ✨ Features
+
+- 🎯 **Settlement Dashboard** - View and track settlement status
+- 📊 **Analytics Interface** - Monitor system metrics and performance
+- 🔄 **Real-time Updates** - Live settlement status tracking
+- 📱 **Responsive Design** - Mobile-friendly interface with Tailwind CSS
+- 🚀 **Static Export** - Optimized for S3 + CloudFront deployment
+
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js 15.5.4 with App Router
+- **Language:** TypeScript 5
+- **Styling:** Tailwind CSS 4
+- **Build Tool:** Turbopack (Next.js bundler)
+- **Deployment:** Static export for AWS S3 + CloudFront
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js ≥20
+- npm ≥10
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# From the monorepo root
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# From the monorepo root
+npm run frontend:dev
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Open http://localhost:3000 in your browser
+```
 
-## Learn More
+### Build & Export
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# From the monorepo root
+# Build for production (static export)
+npm run frontend:build
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# The static files will be in the `out` directory
+```
