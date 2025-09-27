@@ -1,0 +1,14 @@
+{
+  "name": "alongside-challenge",
+  "scripts": {
+  },
+  "workspaces": [
+    "apps/*",
+    "infrastructure",
+    "packages/**"
+  ],
+  "engines": {
+    "node": ">=20",
+    "npm": ">=10"
+  }
+}
