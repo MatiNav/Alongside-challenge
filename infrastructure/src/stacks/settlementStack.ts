@@ -1,7 +1,10 @@
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
-import { RestApiService } from "../constructs/RestApiService";
-import { SettlementService } from "../constructs/SettlementService";
+import {
+  RestApiService,
+  SettlementProcessorService,
+  SettlementService,
+} from "../constructs";
 
 export class SettlementStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -9,8 +12,13 @@ export class SettlementStack extends cdk.Stack {
 
     const restApi = new RestApiService(this, "MainApi", {});
 
-    new SettlementService(this, "SettlementService", {
+    const settlementService = new SettlementService(this, "SettlementService", {
       restApi,
+    });
+
+    new SettlementProcessorService(this, "SettlementProcessorService", {
+      table: settlementService.table,
+      processingQueue: settlementService.processingQueue,
     });
 
     new cdk.CfnOutput(this, "ApiGatewayUrl", {

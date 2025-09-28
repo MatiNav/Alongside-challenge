@@ -1,1 +1,2 @@
-export { handler as mint } from "./handlers/mint";
+export { handler as createMint } from "./handlers/createMint";
+export { handler as processMint } from "./handlers/processMint";
