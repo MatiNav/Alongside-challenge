@@ -111,11 +111,14 @@ export class ProcessorService {
 
   // simulates calling an external service that takes 5s to finish and fails 40% of the time
   private async callExternalService(mintRecord: IMintDBObject) {
-    console.log(`Calling external service for mint ${mintRecord.mintId}`);
+    const probability = 0.5;
+    console.log(
+      `Calling external service for mint ${mintRecord.mintId}. Failure probability: ${probability}`
+    );
 
     await new Promise((resolve) => setTimeout(resolve, 5000));
 
-    const isSuccess = Math.random() > 0.4;
+    const isSuccess = Math.random() > probability;
 
     console.log("External service result", { isSuccess });
 
