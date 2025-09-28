@@ -12,12 +12,6 @@ export interface ISettlementProcessorServiceProps extends cdk.StackProps {
   processingQueue: sqs.Queue;
 }
 
-/**
- * Configure a lambda to process the messages,
- * configure a dlq for failing messages
- * configure a cloudwatch alarm when a msg enters the dlq
- */
-
 export class SettlementProcessorService extends Construct {
   constructor(
     scope: Construct,
@@ -45,6 +39,7 @@ export class SettlementProcessorService extends Construct {
           MINT_PARTITION_KEY: MINT_PARTITION_KEY,
           PROCESSING_QUEUE_URL: processingQueue.queueUrl,
         },
+        timeout: cdk.Duration.seconds(30),
       }
     );
 

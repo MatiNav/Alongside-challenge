@@ -1,3 +1,4 @@
+import * as cdk from "aws-cdk-lib";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as lambdaNodeJs from "aws-cdk-lib/aws-lambda-nodejs";
@@ -11,12 +12,19 @@ export type ILambdaWrapperProps = {
   handler: string;
   initialPolicy?: iam.PolicyStatement[];
   environment?: Record<string, string>;
+  timeout?: cdk.Duration;
 };
 
 export const createNodeJsLambda = (
   scope: Construct,
   lambdaName: string,
-  { lambdaRelPath, handler, initialPolicy, environment }: ILambdaWrapperProps
+  {
+    lambdaRelPath,
+    handler,
+    initialPolicy,
+    environment,
+    timeout,
+  }: ILambdaWrapperProps
 ) => {
   const lambdaPath = path.join(lambdasDirPath, lambdaRelPath);
 
@@ -30,5 +38,6 @@ export const createNodeJsLambda = (
     runtime: lambda.Runtime.NODEJS_20_X,
     initialPolicy,
     environment,
+    timeout,
   });
 };

@@ -1,11 +1,9 @@
 import { IMintDBObject } from "@alongside/shared-types";
 import * as dynamodb from "@aws-sdk/client-dynamodb";
-import * as sqs from "@aws-sdk/client-sqs";
-import { marshall } from "@aws-sdk/util-dynamodb";
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { ILambdaEnvironment } from "../config/environment";
 
 const dynamoDbClient = new dynamodb.DynamoDBClient({});
-const sqsClient = new sqs.SQSClient({});
 
 export class ProcessorService {
   constructor(private readonly env: ILambdaEnvironment) {}
@@ -22,6 +20,7 @@ export class ProcessorService {
       await this.updateMintStatus(mintId, "PROCESSING");
 
       const result = await this.callExternalService(mintRecord);
+      console.log(`External service response:`, result);
 
       if (result.success) {
         await this.updateMintStatus(
@@ -40,11 +39,11 @@ export class ProcessorService {
       const errorMsg =
         error instanceof Error
           ? error.message
-          : "Unknown ProcsessorService error";
+          : "Unknown ProcessorService error";
 
       // always update the record on any failure
       try {
-        await this.updateMintStatus(mintId, "FAILED", undefined, errorMsg);
+        await this.updateMintStatus(mintId, "FAILED", errorMsg);
       } catch (dbError) {
         console.error("Failed to update DynamoDB:", dbError);
       }
@@ -68,7 +67,7 @@ export class ProcessorService {
       );
     }
 
-    return item as unknown as IMintDBObject;
+    return unmarshall(item) as IMintDBObject;
   }
 
   private async updateMintStatus(
@@ -77,6 +76,11 @@ export class ProcessorService {
     errorMessage?: string,
     transactionId?: string
   ): Promise<void> {
+    console.log(`Updateing mint ${mintId} with status: ${status}`, {
+      errorMessage,
+      transactionId,
+    });
+
     let updateExpression = "SET #status = :status, updatedAt = :updatedAt";
     const expressionAttributeNames = { "#status": "status" };
     const expressionAttributeValues: any = {
@@ -105,13 +109,15 @@ export class ProcessorService {
     );
   }
 
-  // simulates calling an external service that takes 5s to finish and fails 20% of the time
+  // simulates calling an external service that takes 5s to finish and fails 40% of the time
   private async callExternalService(mintRecord: IMintDBObject) {
     console.log(`Calling external service for mint ${mintRecord.mintId}`);
 
     await new Promise((resolve) => setTimeout(resolve, 5000));
 
-    const isSuccess = Math.random() > 0.2;
+    const isSuccess = Math.random() > 0.4;
+
+    console.log("External service result", { isSuccess });
 
     if (isSuccess) {
       return {
