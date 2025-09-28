@@ -1,0 +1,15 @@
+{
+  "name": "@alongside/mint",
+  "main": "index.ts",
+  "dependencies": {
+    "aws-lambda": "^1.0.7"
+  },
+  "devDependencies": {
+    "@alongside/shared-types": "*",
+    "@aws-sdk/client-dynamodb": "^3.896.0",
+    "@aws-sdk/client-sqs": "^3.896.0",
+    "@aws-sdk/util-dynamodb": "^3.896.0",
+    "@types/node": "^22.18.6",
+    "ts-node": "^10.9.2"
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "name": "@alongside/shared-types",
+  "main": "./src/index.d.ts"
+}
