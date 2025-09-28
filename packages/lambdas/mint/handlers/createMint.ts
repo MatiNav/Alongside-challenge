@@ -1,10 +1,10 @@
 import { IMintRequest } from "@alongside/shared-types";
 import * as lambda from "aws-lambda";
 import { env } from "../config/environment";
-import { MintService } from "../services/MintService";
+import { CreatorService } from "../services/CreatorService";
 import { createResponse } from "../utils/responses";
 
-const mintService = new MintService(env);
+const mintService = new CreatorService(env);
 
 export const handler: lambda.APIGatewayProxyHandler = async (
   event: lambda.APIGatewayProxyEvent

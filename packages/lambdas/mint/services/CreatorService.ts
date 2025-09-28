@@ -8,7 +8,7 @@ import { ILambdaEnvironment } from "../config/environment";
 const dynamoDbClient = new dynamodb.DynamoDBClient({});
 const sqsClient = new sqs.SQSClient({});
 
-export class MintService {
+export class CreatorService {
   constructor(private readonly env: ILambdaEnvironment) {}
 
   async createMint(request: IMintRequest) {
