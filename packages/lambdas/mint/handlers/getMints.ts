@@ -29,9 +29,9 @@ export const handler: lambda.APIGatewayProxyHandler = async (
 
     const nextToken = queryParams.nextToken;
 
-    const response = await getterService.getMints(limit, nextToken);
+    const result = await getterService.getMints(limit, nextToken);
 
-    return createResponse(200, response);
+    return createResponse(200, result);
   } catch (error) {
     console.error("Error getting Mints:", error);
 

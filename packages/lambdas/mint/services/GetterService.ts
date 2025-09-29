@@ -1,3 +1,4 @@
+import { IPaginationResult, IMintDBObject } from "@alongside/shared-types";
 import { IMintGetterLambdaEnvironment } from "../config/environment";
 import { MintTable } from "./MintTable";
 
@@ -13,8 +14,8 @@ export class GetterService {
 
     return {
       items: result.items,
-      nextToken: result.lastEvaluatedKey,
+      nextToken: result.nextToken,
       hasMore: result.hasMore,
-    };
+    } as IPaginationResult<IMintDBObject>;
   }
 }

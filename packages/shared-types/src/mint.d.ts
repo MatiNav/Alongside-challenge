@@ -10,7 +10,7 @@ export type IGetMintRequest = {
 
 export type IPaginationResult<T> = {
   items: T[];
-  lastEvaluatedKey?: string;
+  nextToken?: string;
   hasMore: boolean;
 };
 

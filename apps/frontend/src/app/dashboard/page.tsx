@@ -29,14 +29,12 @@ export default function DashboardPage() {
       const data: IPaginationResult<IMintDBObject> = await response.json();
 
       if (token) {
-        // Loading more items - append to existing list
         setMints((prev) => [...prev, ...data.items]);
       } else {
-        // Initial load - replace the list
         setMints(data.items);
       }
 
-      setNextToken(data.lastEvaluatedKey);
+      setNextToken(data.nextToken);
       setHasMore(data.hasMore);
     } catch (err) {
       setError(
@@ -239,7 +237,6 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Simple Pagination - Show Next Page Button */}
             {hasMore && (
               <div className="flex justify-center">
                 <button
@@ -274,7 +271,6 @@ export default function DashboardPage() {
               </div>
             )}
 
-            {/* Show message when no more items */}
             {!hasMore && mints.length > 0 && (
               <div className="text-center py-6">
                 <p className="text-gray-500 text-sm">
