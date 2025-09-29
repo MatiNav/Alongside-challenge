@@ -1,8 +1,8 @@
 import * as lambda from "aws-lambda";
-import { env } from "../config/environment";
+import { validateMintSetterEnvironment } from "../config/environment";
 import { ProcessorService } from "../services/ProcessorService";
 
-const processorService = new ProcessorService(env);
+const processorService = new ProcessorService(validateMintSetterEnvironment());
 
 export const handler: lambda.SQSHandler = async (event) => {
   try {

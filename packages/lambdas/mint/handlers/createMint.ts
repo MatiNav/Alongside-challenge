@@ -1,16 +1,16 @@
-import { IMintRequest } from "@alongside/shared-types";
+import { ICreateMintRequest } from "@alongside/shared-types";
 import * as lambda from "aws-lambda";
-import { env } from "../config/environment";
+import { validateMintSetterEnvironment } from "../config/environment";
 import { CreatorService } from "../services/CreatorService";
 import { createResponse } from "../utils/responses";
 
-const mintService = new CreatorService(env);
+const mintService = new CreatorService(validateMintSetterEnvironment());
 
 export const handler: lambda.APIGatewayProxyHandler = async (
   event: lambda.APIGatewayProxyEvent
 ) => {
   try {
-    const mintRequest = JSON.parse(event.body || "{}") as IMintRequest;
+    const mintRequest = JSON.parse(event.body || "{}") as ICreateMintRequest;
 
     if (!mintRequest) {
       throw new Error("body is not defined");

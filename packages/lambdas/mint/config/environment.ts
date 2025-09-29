@@ -1,7 +1,16 @@
-export interface ILambdaEnvironment {
+export interface IBaseEnvironment {
+  [key: string]: string;
+}
+
+export interface IMintSetterLambdaEnvironment extends IBaseEnvironment {
   MINT_TABLE_NAME: string;
   MINT_PARTITION_KEY: string;
   PROCESSING_QUEUE_URL: string;
+}
+
+export interface IMintGetterLambdaEnvironment extends IBaseEnvironment {
+  MINT_TABLE_NAME: string;
+  MINT_PARTITION_KEY: string;
 }
 
 class EnvironmentError extends Error {
@@ -11,20 +20,35 @@ class EnvironmentError extends Error {
   }
 }
 
-const validateEnvironment = (): ILambdaEnvironment => {
-  const requiredVars = {
-    MINT_TABLE_NAME: process.env.MINT_TABLE_NAME,
-    MINT_PARTITION_KEY: process.env.MINT_PARTITION_KEY,
-    PROCESSING_QUEUE_URL: process.env.PROCESSING_QUEUE_URL,
-  };
+export const validateEnvironment = <T extends IBaseEnvironment>(
+  requiredKeys: (keyof T)[]
+): T => {
+  const envVars: Partial<T> = {};
 
-  for (const [key, value] of Object.entries(requiredVars)) {
+  for (const key of requiredKeys) {
+    const value = process.env[key as string];
     if (!value) {
-      throw new EnvironmentError(key);
+      throw new EnvironmentError(key as string);
     }
+    envVars[key] = value as T[keyof T];
   }
 
-  return requiredVars as ILambdaEnvironment;
+  return envVars as T;
 };
 
-export const env = validateEnvironment();
+export const validateMintSetterEnvironment =
+  (): IMintSetterLambdaEnvironment => {
+    return validateEnvironment<IMintSetterLambdaEnvironment>([
+      "MINT_TABLE_NAME",
+      "MINT_PARTITION_KEY",
+      "PROCESSING_QUEUE_URL",
+    ]);
+  };
+
+export const validateMintGetterEnvironment =
+  (): IMintGetterLambdaEnvironment => {
+    return validateEnvironment<IMintGetterLambdaEnvironment>([
+      "MINT_TABLE_NAME",
+      "MINT_PARTITION_KEY",
+    ]);
+  };
