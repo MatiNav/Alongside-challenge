@@ -1,26 +1,11 @@
 "use client";
 
+import { IMintDBObject, IPaginationResult } from "@alongside/shared-types";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-interface Mint {
-  mintId: string;
-  amount: number;
-  token: string;
-  status: string;
-  createdAt: string;
-  updatedAt?: string;
-  errorMessage?: string;
-}
-
-interface PaginationResult {
-  items: Mint[];
-  nextToken?: string;
-  hasMore: boolean;
-}
-
 export default function DashboardPage() {
-  const [mints, setMints] = useState<Mint[]>([]);
+  const [mints, setMints] = useState<IMintDBObject[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [nextToken, setNextToken] = useState<string | undefined>();
@@ -41,7 +26,7 @@ export default function DashboardPage() {
         throw new Error("Failed to fetch mints");
       }
 
-      const data: PaginationResult = await response.json();
+      const data: IPaginationResult<IMintDBObject> = await response.json();
 
       if (token) {
         // Loading more items - append to existing list
@@ -51,7 +36,7 @@ export default function DashboardPage() {
         setMints(data.items);
       }
 
-      setNextToken(data.nextToken);
+      setNextToken(data.lastEvaluatedKey);
       setHasMore(data.hasMore);
     } catch (err) {
       setError(
@@ -125,7 +110,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="mb-6 flex justify-between items-center">
           <div>
             <Link
@@ -155,7 +140,6 @@ export default function DashboardPage() {
             </Link>
           </div>
         </div>
-
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
             <p className="text-red-600">{error}</p>
@@ -167,7 +151,6 @@ export default function DashboardPage() {
             </button>
           </div>
         )}
-
         {mints.length === 0 && !error ? (
           <div className="text-center py-12">
             <p className="text-gray-600 text-lg mb-4">No mints found</p>
@@ -198,6 +181,9 @@ export default function DashboardPage() {
                         Status
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Transaction ID
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Created
                       </th>
                     </tr>
@@ -212,7 +198,7 @@ export default function DashboardPage() {
                           {mint.amount.toLocaleString()}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {mint.token}
+                          {mint.token.toUpperCase()}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
@@ -224,11 +210,23 @@ export default function DashboardPage() {
                           </span>
                           {mint.errorMessage && (
                             <p
-                              className="text-xs text-red-600 mt-1"
+                              className="text-xs text-red-600 mt-1 max-w-xs truncate"
                               title={mint.errorMessage}
                             >
-                              {mint.errorMessage.slice(0, 50)}...
+                              {mint.errorMessage}
                             </p>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
+                          {mint.transactionId ? (
+                            <span
+                              className="text-blue-600 cursor-help"
+                              title={mint.transactionId}
+                            >
+                              {mint.transactionId}
+                            </span>
+                          ) : (
+                            <span className="text-gray-400 italic">N/A</span>
                           )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

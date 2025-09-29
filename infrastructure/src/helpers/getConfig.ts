@@ -5,6 +5,7 @@ export const getConfig = () => {
   const {
     AWS_ACCOUNT_ID,
     AWS_REGION,
+    AWS_CERT_ID,
     DOMAIN,
     API_SUBDOMAIN,
     WEB_SUBDOMAIN,
@@ -16,6 +17,9 @@ export const getConfig = () => {
   }
   if (!AWS_REGION) {
     throw new Error("AWS_REGION is not defined");
+  }
+  if (!AWS_CERT_ID) {
+    throw new Error("AWS_CERT_ID is not defined");
   }
   if (!DOMAIN) {
     throw new Error("DOMAIN is not defined");
@@ -33,6 +37,7 @@ export const getConfig = () => {
   return {
     awsAccountId: AWS_ACCOUNT_ID,
     awsRegion: AWS_REGION,
+    awsCertId: AWS_CERT_ID,
     domain: DOMAIN,
     apiSubdomain: API_SUBDOMAIN,
     webSubdomain: WEB_SUBDOMAIN,
