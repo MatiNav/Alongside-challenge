@@ -8,8 +8,8 @@
 
 ## 🚀 Live URLs
 
-- **Frontend:** [alongside.matiasnavarro.dev](https://alongside.matiasnavarrodev.com)
-- **API:** [alongside-api.matiasnavarro.dev](https://alongside-api.matiasnavarrodev.com)
+- **Frontend:** [alongside.matiasnavarrodev.com](https://alongside.matiasnavarrodev.com)
+- **API:** [alongside-api.matiasnavarrodev.com](https://alongside-api.matiasnavarrodev.com)
 
 ## 📚 Documentation
 
