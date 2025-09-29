@@ -31,6 +31,19 @@ export class SettlementService extends Construct {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
+    this.table.addGlobalSecondaryIndex({
+      indexName: "CreatedAtIndex",
+      partitionKey: {
+        name: "entityType",
+        type: dynamoDb.AttributeType.STRING,
+      },
+      sortKey: {
+        name: "createdAt",
+        type: dynamoDb.AttributeType.STRING,
+      },
+      projectionType: dynamoDb.ProjectionType.ALL,
+    });
+
     const dlq = new sqs.Queue(this, "SettlementProcessingDLQ", {
       queueName: "settlement-processing-dlq",
     });
@@ -64,8 +77,8 @@ export class SettlementService extends Construct {
     });
 
     const mintLambda = createNodeJsLambda(this, "mintLambda", {
-      lambdaRelPath: "mint/index.ts",
-      handler: "createMint",
+      lambdaRelPath: "mint/handlers/createMint.ts",
+      handler: "handler",
       initialPolicy: [mintTablePolicy],
       environment: {
         MINT_TABLE_NAME: this.table.tableName,
@@ -76,8 +89,9 @@ export class SettlementService extends Construct {
 
     this.processingQueue.grantSendMessages(mintLambda);
 
-    restApi.addTranslateMethod({
+    restApi.addMethodToResource({
       httpMethod: "POST",
+      resourcePath: "mint",
       lambda: mintLambda,
     });
   }

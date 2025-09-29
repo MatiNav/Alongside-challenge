@@ -1,6 +1,7 @@
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import {
+  DashboardService,
   RestApiService,
   SettlementProcessorService,
   SettlementService,
@@ -19,6 +20,11 @@ export class SettlementStack extends cdk.Stack {
     new SettlementProcessorService(this, "SettlementProcessorService", {
       table: settlementService.table,
       processingQueue: settlementService.processingQueue,
+    });
+
+    new DashboardService(this, "DashboardService", {
+      restApi,
+      table: settlementService.table,
     });
 
     new cdk.CfnOutput(this, "ApiGatewayUrl", {

@@ -31,8 +31,8 @@ export class SettlementProcessorService extends Construct {
       this,
       "mintProcessorLambda",
       {
-        lambdaRelPath: "mint/index.ts",
-        handler: "processMint",
+        lambdaRelPath: "mint/handlers/processMint.ts",
+        handler: "handler",
         initialPolicy: [mintTablePolicy],
         environment: {
           MINT_TABLE_NAME: table.tableName,

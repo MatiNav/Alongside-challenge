@@ -1,10 +1,22 @@
-export type IMintRequest = {
+export type ICreateMintRequest = {
   amount: number;
   token: string;
 };
 
-export type IMintDBObject = IMintRequest & {
+export type IGetMintRequest = {
+  limit: string;
+  offset: string;
+};
+
+export type IPaginationResult<T> = {
+  items: T[];
+  lastEvaluatedKey?: string;
+  hasMore: boolean;
+};
+
+export type IMintDBObject = ICreateMintRequest & {
   mintId: string;
   status: string;
   createdAt: string;
+  entityType: string;
 };
