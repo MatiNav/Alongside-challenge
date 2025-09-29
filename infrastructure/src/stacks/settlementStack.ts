@@ -7,6 +7,7 @@ import {
   SettlementService,
 } from "../constructs";
 import { CertificateWrapper } from "../constructs/CertificateWrapper";
+import { MonitoringService } from "../constructs/MonitoringService";
 import { StaticWebsiteDeploymnet } from "../constructs/StaticWebsiteDeployment";
 import { getConfig } from "../helpers";
 import { applyTagsToConstruct, applyTagsToStack } from "../helpers/tags";
@@ -96,6 +97,27 @@ export class SettlementStack extends cdk.Stack {
     applyTagsToConstruct(websiteDeployment, {
       service: "frontend",
       component: "hosting",
+    });
+
+    // Add after websiteDeployment (around line 95)
+    const monitoring = new MonitoringService(this, "MonitoringService", {
+      mintLambda: settlementService.mintLambda, // You'll need to expose this
+      dashboardLambda: dashboardService.getMintsLambda, // You'll need to expose this
+      processingQueue: settlementService.processingQueue,
+      deadLetterQueue: settlementService.dlq, // You'll need to expose this
+      restApi: restApi.restApi,
+    });
+
+    applyTagsToConstruct(monitoring, {
+      service: "monitoring",
+      component: "observability",
+    });
+
+    // Add stack output for dashboard URL
+    new cdk.CfnOutput(this, `${config.projectName}MonitoringDashboardUrl`, {
+      value: `https://console.aws.amazon.com/cloudwatch/home?region=${this.region}#dashboards:name=${monitoring.dashboard.dashboardName}`,
+      description: "CloudWatch Dashboard URL",
+      exportName: `${config.projectName}MonitoringDashboardUrl`,
     });
   }
 }
