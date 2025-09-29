@@ -19,4 +19,6 @@ export type IMintDBObject = ICreateMintRequest & {
   status: string;
   createdAt: string;
   entityType: string;
+  errorMessage?: string;
+  transactionId?: string;
 };

@@ -11,14 +11,14 @@ export default function Home() {
           <p className="text-gray-600">Create and manage your mints</p>
         </div>
 
-        <div className="spacae-y-4">
+        <div className="space-y-4">
+          {" "}
           <Link
             href="/mint"
             className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors block"
           >
-            Create New Mint
+            ; Create New Mint
           </Link>
-
           <Link
             href="/dashboard"
             className="w-full bg-gray-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-700 transition-colors block"

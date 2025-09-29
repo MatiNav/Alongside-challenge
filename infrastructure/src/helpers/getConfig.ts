@@ -11,9 +11,6 @@ export const getConfig = () => {
     PROJECT_NAME,
   } = process.env;
 
-  if (!AWS_ACCOUNT_ID) {
-    throw new Error("AWS_ACCOUNT_ID is not defined");
-  }
   if (!AWS_REGION) {
     throw new Error("AWS_REGION is not defined");
   }
