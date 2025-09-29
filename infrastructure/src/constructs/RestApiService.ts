@@ -22,7 +22,6 @@ export class RestApiService extends Construct {
     super(scope, id);
     const { apiUrl, zone, certificate, apiSubdomain } = props;
 
-    // TODO: handle cors properly
     this.restApi = new apigateway.RestApi(this, "SettlementAPI", {
       domainName: {
         domainName: apiUrl,

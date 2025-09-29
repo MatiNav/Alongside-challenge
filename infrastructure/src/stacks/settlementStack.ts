@@ -18,7 +18,7 @@ export class SettlementStack extends cdk.Stack {
     const config = getConfig();
 
     applyTagsToStack(this, {
-      environment: "prod", // Change to "prod" for production
+      environment: "prod",
       project: "alongside-challenge",
     });
 
@@ -99,7 +99,6 @@ export class SettlementStack extends cdk.Stack {
       component: "hosting",
     });
 
-    // Add after websiteDeployment (around line 95)
     const monitoring = new MonitoringService(this, "MonitoringService", {
       mintLambda: settlementService.mintLambda, // You'll need to expose this
       dashboardLambda: dashboardService.getMintsLambda, // You'll need to expose this
@@ -113,7 +112,6 @@ export class SettlementStack extends cdk.Stack {
       component: "observability",
     });
 
-    // Add stack output for dashboard URL
     new cdk.CfnOutput(this, `${config.projectName}MonitoringDashboardUrl`, {
       value: `https://console.aws.amazon.com/cloudwatch/home?region=${this.region}#dashboards:name=${monitoring.dashboard.dashboardName}`,
       description: "CloudWatch Dashboard URL",

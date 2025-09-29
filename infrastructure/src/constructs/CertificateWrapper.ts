@@ -18,16 +18,10 @@ export class CertificateWrapper extends Construct {
 
     const { domain } = props;
 
-    // Import existing resources from your main project
-    const zone = route53.HostedZone.fromLookup(this, "ImportedHostedZone", {
-      domainName: domain, // matiasnavarrodev.com
-    });
-
     this.zone = route53.HostedZone.fromLookup(this, "SettlementZone", {
       domainName: domain,
     });
 
-    // Create a NEW certificate for this project's subdomains
     this.certificate = new acm.Certificate(this, "AlongsideCertificate", {
       domainName: `alongside.${domain}`,
       subjectAlternativeNames: [`alongside-api.${domain}`],

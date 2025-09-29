@@ -29,7 +29,6 @@ export class StaticWebsiteDeploymnet extends Construct {
     const { domain, webUrl, certificate, zone, projectName, webSubdomain } =
       props;
 
-    // bucket where website resides
     const bucket = new s3.Bucket(this, "SettlementWebsiteBucket", {
       websiteIndexDocument: "index.html",
       websiteErrorDocument: "404.html",
@@ -39,7 +38,6 @@ export class StaticWebsiteDeploymnet extends Construct {
       autoDeleteObjects: true,
     });
 
-    // Try to use existing distribution or create new one
     const distro = this.createDistribution(bucket, {
       domain,
       webUrl,
@@ -47,7 +45,6 @@ export class StaticWebsiteDeploymnet extends Construct {
       projectName,
     });
 
-    //s3 construct to deploy the website dist content
     new s3deploy.BucketDeployment(this, "WebsiteDeploy", {
       destinationBucket: bucket,
       sources: [s3deploy.Source.asset(frontendDistPath)],
