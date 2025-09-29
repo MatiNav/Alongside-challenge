@@ -12,6 +12,8 @@ interface IDashboardServiceProps extends cdk.StackProps {
 }
 
 export class DashboardService extends Construct {
+  public getMintsLambda: cdk.aws_lambda_nodejs.NodejsFunction;
+
   constructor(scope: Construct, id: string, props: IDashboardServiceProps) {
     super(scope, id);
 
@@ -22,7 +24,7 @@ export class DashboardService extends Construct {
       resources: [table.tableArn, `${table.tableArn}/index/*`],
     });
 
-    const getMintsLambda = createNodeJsLambda(this, "getMintsLambda", {
+    this.getMintsLambda = createNodeJsLambda(this, "getMintsLambda", {
       lambdaRelPath: "mint/handlers/getMints.ts",
       handler: "handler",
       initialPolicy: [mintTablePolicy],
@@ -35,7 +37,7 @@ export class DashboardService extends Construct {
     restApi.addMethodToResource({
       httpMethod: "GET",
       resourcePath: "mint",
-      lambda: getMintsLambda,
+      lambda: this.getMintsLambda,
     });
   }
 }

@@ -16,6 +16,8 @@ export interface SettlementServiceProps extends cdk.StackProps {
 export class SettlementService extends Construct {
   public table: dynamoDb.Table;
   public processingQueue: sqs.Queue;
+  public dlq: sqs.Queue;
+  public mintLambda: cdk.aws_lambda_nodejs.NodejsFunction;
 
   constructor(scope: Construct, id: string, props: SettlementServiceProps) {
     super(scope, id);
@@ -44,7 +46,7 @@ export class SettlementService extends Construct {
       projectionType: dynamoDb.ProjectionType.ALL,
     });
 
-    const dlq = new sqs.Queue(this, "SettlementProcessingDLQ", {
+    this.dlq = new sqs.Queue(this, "SettlementProcessingDLQ", {
       queueName: "settlement-processing-dlq",
     });
 
@@ -53,7 +55,7 @@ export class SettlementService extends Construct {
       visibilityTimeout: cdk.Duration.minutes(5),
       retentionPeriod: cdk.Duration.days(14),
       deadLetterQueue: {
-        queue: dlq,
+        queue: this.dlq,
         maxReceiveCount: 1,
       },
     });
@@ -61,7 +63,7 @@ export class SettlementService extends Construct {
     // In a real project, we should defined the strategy for handling
     // failed mints.
     new cloudwatch.Alarm(this, "DLQMessagesAlarm", {
-      metric: dlq.metricApproximateNumberOfMessagesVisible({
+      metric: this.dlq.metricApproximateNumberOfMessagesVisible({
         statistic: "Sum",
         period: cdk.Duration.minutes(5),
       }),
@@ -76,7 +78,7 @@ export class SettlementService extends Construct {
       resources: [this.table.tableArn],
     });
 
-    const mintLambda = createNodeJsLambda(this, "mintLambda", {
+    this.mintLambda = createNodeJsLambda(this, "mintLambda", {
       lambdaRelPath: "mint/handlers/createMint.ts",
       handler: "handler",
       initialPolicy: [mintTablePolicy],
@@ -87,12 +89,12 @@ export class SettlementService extends Construct {
       },
     });
 
-    this.processingQueue.grantSendMessages(mintLambda);
+    this.processingQueue.grantSendMessages(this.mintLambda);
 
     restApi.addMethodToResource({
       httpMethod: "POST",
       resourcePath: "mint",
-      lambda: mintLambda,
+      lambda: this.mintLambda,
     });
   }
 }

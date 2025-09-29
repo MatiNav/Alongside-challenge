@@ -34,6 +34,11 @@ export class RestApiService extends Construct {
         allowCredentials: true,
         allowHeaders: apigateway.Cors.DEFAULT_HEADERS,
       },
+      deployOptions: {
+        stageName: "prod",
+        throttlingRateLimit: 0.033,
+        throttlingBurstLimit: 5,
+      },
     });
 
     new route53.ARecord(this, "SettlementRestApiRecord", {
