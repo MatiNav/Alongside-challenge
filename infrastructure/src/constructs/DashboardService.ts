@@ -23,8 +23,8 @@ export class DashboardService extends Construct {
     });
 
     const getMintsLambda = createNodeJsLambda(this, "getMintsLambda", {
-      lambdaRelPath: "mint/index.ts",
-      handler: "getMints",
+      lambdaRelPath: "mint/handlers/getMints.ts",
+      handler: "handler",
       initialPolicy: [mintTablePolicy],
       environment: {
         MINT_TABLE_NAME: table.tableName,

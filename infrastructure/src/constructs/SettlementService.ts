@@ -77,8 +77,8 @@ export class SettlementService extends Construct {
     });
 
     const mintLambda = createNodeJsLambda(this, "mintLambda", {
-      lambdaRelPath: "mint/index.ts",
-      handler: "createMint",
+      lambdaRelPath: "mint/handlers/createMint.ts",
+      handler: "handler",
       initialPolicy: [mintTablePolicy],
       environment: {
         MINT_TABLE_NAME: this.table.tableName,
