@@ -7,8 +7,6 @@ export interface ICertificateWrapperProps extends cdk.StackProps {
   domain: string;
   webUrl: string;
   apiUrl: string;
-  awsAccountId: string;
-  awsCertId: string;
 }
 
 export class CertificateWrapper extends Construct {
@@ -18,7 +16,7 @@ export class CertificateWrapper extends Construct {
   constructor(scope: Construct, id: string, props: ICertificateWrapperProps) {
     super(scope, id);
 
-    const { domain, awsAccountId, awsCertId } = props;
+    const { domain } = props;
 
     // Import existing resources from your main project
     const zone = route53.HostedZone.fromLookup(this, "ImportedHostedZone", {

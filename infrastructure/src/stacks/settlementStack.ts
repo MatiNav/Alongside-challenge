@@ -26,8 +26,6 @@ export class SettlementStack extends cdk.Stack {
         domain,
         webUrl,
         apiUrl,
-        awsCertId: config.awsCertId,
-        awsAccountId: config.awsAccountId,
       }
     );
 
